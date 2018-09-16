@@ -3,7 +3,8 @@ var webpack = require('webpack');
 
 module.exports = {
   entry: {
-      index: './jsx/index.js'
+      admin: './jsx/admin.jsx',
+      admin_event: './jsx/admin_event.jsx'
   },
   output: {
       path: path.resolve(__dirname, 'build/js'),
@@ -17,7 +18,7 @@ module.exports = {
               test: /\.jsx$/,
               loader: 'babel-loader',
               query: {
-                  presets: ["es2015", "react", "minify"]
+                  presets: ["es2015", "react"]
               }
           }
       ]
