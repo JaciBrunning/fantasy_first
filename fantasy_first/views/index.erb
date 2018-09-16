@@ -1,5 +1,31 @@
-<div id="titleview"> </div>
-
-<script type="text/javascript">
-  FantasyFIRST.TitleView.renderDOM("titleview");
-</script>
+<h2> Fantasy FIRST </h2>
+<h4> Presented by FIRST Updates Now // Site by Jaci </h4>
+<hr />
+<% if !@events.nil? && !@events.empty? %>
+<h3> Active Events </h3>
+<table>
+  <thead>
+    <tr>
+      <th> Event Code </th>
+      <th> Event Name </th>
+      <th> Status </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @events.each do |event| %>
+      <tr>
+        <td> <%= event.key %> </td>
+        <td> <a href="/event/<%= event.key %>"> <%= event.name %> </a> </td>
+        <td> 
+          <%= 
+            event.drafting ? "<span class=\"orange\"><i class=\"fas fa-clipboard\"></i> Selecting Drafts</span>" : 
+              event.active ? "<span class=\"green\"><i class=\"fas fa-check\"></i> In Progress</span>" : 
+                "<i class=\"fas fa-clock\"></i> Waiting"
+          %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% else %>
+<h4> There are no Fantasy FIRST events currently live :( </h4>
+<% end %>

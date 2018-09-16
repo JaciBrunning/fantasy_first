@@ -4,7 +4,8 @@ var webpack = require('webpack');
 module.exports = {
   entry: {
       admin: './jsx/admin.jsx',
-      admin_event: './jsx/admin_event.jsx'
+      admin_event: './jsx/admin_event.jsx',
+      draft: './jsx/draft.jsx'
   },
   output: {
       path: path.resolve(__dirname, 'build/js'),

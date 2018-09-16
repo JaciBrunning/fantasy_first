@@ -20,8 +20,45 @@ class FantasyFirst < WebcoreApp()
 
   get "/?" do
     @title = "Fantasy FIRST"
+    @events = FF::Events.live
     erb :index
   end
+
+  get "/event/:event/?" do |evt|
+    begin
+      @event = FF::Events.event evt
+      redirect "/draft/#{evt}" if @event.drafting
+      redirect "/" if !@event.live
+      @title = "Fantasy FIRST - #{@event.name}"
+      erb :event
+    rescue => e
+      redirect "/"
+    end
+  end
+
+  get "/draft/:event/?" do |evt|
+    begin
+      @event = FF::Events.event evt
+      @teams = FF::Events.teams_enabled evt
+      redirect "/event/#{evt}" if !@event.drafting
+      @title = "Fantasy FIRST - Draft for #{@event.name}"
+      erb :event_draft
+    rescue => e
+      redirect "/"
+    end
+  end
+
+  post "/draft/:event/?" do |evt|
+    begin
+      @event = FF::Events.event evt
+      data = JSON.parse(request.body.read)
+      FF::Events.submit_draft(evt, data)
+    rescue => e
+      [400, {}, "Unknown Error"]
+    end
+  end
+
+  #### ADMIN ####
 
   get "/admin" do
     auth_su!
@@ -84,7 +121,7 @@ class FantasyFirst < WebcoreApp()
   fantasy_css.memcache = true
   services[:cdn].register fantasy_css
 
-  ["admin", "admin_event"].each do |name|
+  ["admin", "admin_event", "draft"].each do |name|
     jsx = FileResource.new :"#{name}.js", File.join(FantasyFirstConstants::JS_DIR, "#{name}.js")
     jsx.memcache = true
     services[:cdn].register jsx

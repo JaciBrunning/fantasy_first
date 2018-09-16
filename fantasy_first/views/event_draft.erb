@@ -1,0 +1,13 @@
+<h2> Fantasy FIRST - <%= @event.name %> </h2>
+<h4> Draft Selections </h4>
+
+<hr />
+<div id="draftSelector">
+</div>
+
+<script type="text/javascript">
+  var EVENT_KEY = "<%=@event.key %>";
+  var TEAM_OPTIONS = <%= @teams.map { |x| { team: x.team, cost: x.cost } }.to_json %>;
+</script>
+
+<script src="/cdn/draft.js" crossorigin></script>

@@ -14,6 +14,19 @@ module FF
       unrestrict_primary_key
     end
 
+    class EventDraftTeams < Sequel::Model(Webcore::DB.db[SCHEMA[:draft_teams]])
+      many_to_one :event
+
+      plugin :uuid, field: :id
+
+      def validate
+        super
+        errors.add(:email, 'is not a valid email address') unless team_email =~ /\A([\w+\-].?)+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
+        errors.add(:email, 'is too long') if team_email.size > 90
+        errors.add(:name, 'is too long') if team_name.size > 90
+      end
+    end
+
     class << self
       def event key
         Event.first(Sequel.ilike(:key, key))
@@ -21,6 +34,10 @@ module FF
 
       def events
         Event.order(:key).all
+      end
+
+      def live
+        Event.order(:key).where(live: true)
       end
 
       def update_event opts
@@ -48,7 +65,11 @@ module FF
       end
 
       def teams key
-        EventDraftOptions.where(event_key: key).order(:team).all
+        EventDraftOptions.where(event_key: key).order(:team)
+      end
+
+      def teams_enabled key
+        teams(key).where(pickable: true)
       end
 
       def update_team data
@@ -56,6 +77,18 @@ module FF
         edo.cost = [100, [0, data['cost'].to_i].max].min
         edo.pickable = data['pickable']
         edo.save
+      end
+
+      def submit_draft evt, data
+        return [400, {}, "No Teams!"] if data["teams"].nil? || data["teams"].empty?
+        begin
+          EventDraftTeams.create(event_key: evt, team_name: data["name"], team_email: data["email"], picks_json: data["teams"].to_json)
+          "Success"
+        rescue Sequel::UniqueConstraintViolation => e
+          [400, {}, "This team is already registered!"]
+        rescue Sequel::ValidationFailed => e
+          [400, {}, e.message]
+        end
       end
     end
   end
