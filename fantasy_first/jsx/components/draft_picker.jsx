@@ -67,7 +67,8 @@ export class DraftPicker extends React.Component {
         name: this.state.name,
         email: this.state.email
       }).then((response) => {
-        console.log("Success!")
+        alert("You're registered!")
+        window.location = "/"
       }).catch((err) => {
         alert("Error! " + err.response.data)
       })
