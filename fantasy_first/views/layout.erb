@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title><%= @title %></title>
+    <link href="/cdn/cdn/milligram.css" rel="stylesheet">
+    <link href="/cdn/cdn/fontawesome.css" rel="stylesheet">
+    <link href="/cdn/fantasy.css" rel="stylesheet">
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="/cdn/bundle.js" crossorigin></script>
+</head>
+<body>
+    <main class="wrapper">
+        <nav class="navigation" id="navigation">
+            <section class="container">
+                <a class="button button-clear"> <%= @title %> </a>
+                <div style="float: right;">
+                    <a href="/" class="button button-clear"> Home </a>
+                    <% if auth? %>
+                        <a class="button button-clear"> <%= @user.username %> </a>
+                        <% if auth_su? %>
+                            <a href="/admin" class="button button-clear"> Admin Panel </a>
+                        <% end %>
+                        <a href="/logout" class="button button-clear"> Logout </a>
+                    <% end %>
+                </div>
+            </section>
+        </nav>
+
+        <section class="container body">
+            <%= yield %>
+        </section>
+    </main>
+</body>
