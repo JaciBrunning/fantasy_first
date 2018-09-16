@@ -1,11 +1,14 @@
 import { Websocket } from './websocket.jsx';
-import { EventDraftList } from './components/event_control.jsx'
+import { EventDraftOptionList, EventAdminDraftList } from './components/event_control.jsx'
 
 let adminSocket = new Websocket("admin");
 adminSocket.establish();
 
 let content = <div>
-  <EventDraftList ws={adminSocket} event_key={ EVENT_KEY } />
+  {
+    EVENT_DRAFTING ? <EventAdminDraftList ws={adminSocket} event_key={EVENT_KEY} /> : <EventDraftOptionList ws={adminSocket} event_key={ EVENT_KEY } />
+  }
+  
 </div>
 
 ReactDOM.render(content, document.getElementById("adminevent"));

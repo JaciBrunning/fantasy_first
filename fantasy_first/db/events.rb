@@ -94,6 +94,20 @@ module FF
           [400, {}, e.message]
         end
       end
+
+      def all_drafts evt
+        EventDraftTeams.where(event_key: evt)
+      end
+
+      def delete_draft id
+        EventDraftTeams.where(id: id).delete
+      end
+
+      def set_draft_host data
+        edt = EventDraftTeams.first(id: data['id'])
+        edt.host = data['host']
+        edt.save
+      end
     end
   end
 end

@@ -8,6 +8,7 @@ Sequel.migration do
       String :team_name, null: false
       String :team_email, null: false
       String :picks_json, null: false  # JSON since we will never have to edit a single pick at once - picks are final
+      Boolean :host, null: false, default: false
 
       index Sequel.function(:lower, :team_name)
       index Sequel.function(:lower, :team_email)

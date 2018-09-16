@@ -117,6 +117,18 @@ class FantasyFirst < WebcoreApp()
     end
   end
 
+  services[:admin_ws].listen :draft do |type, action, data, sock|
+    if action == :list
+      sock.send(:draft, :list, FF::Events.all_drafts(data).to_json)
+    elsif action == :delete
+      FF::Events.delete_draft(data['id'])
+      sock.send(:draft, :list, FF::Events.all_drafts(data['event']).to_json)
+    elsif action == :sethost
+      FF::Events.set_draft_host(data)
+      sock.send(:draft, :list, FF::Events.all_drafts(data['event']).to_json)
+    end
+  end
+
   fantasy_css = FileResource.new :"fantasy.css", File.join(FantasyFirstConstants::CSS_DIR, "fantasy.min.css")
   fantasy_css.memcache = true
   services[:cdn].register fantasy_css
