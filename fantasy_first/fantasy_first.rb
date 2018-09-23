@@ -14,6 +14,16 @@ class FantasyFirst < WebcoreApp()
   set :views, "#{File.dirname(__FILE__)}/views"
   services.register :admin_ws, Webcore::Websocket::Driver.new
 
+  REFRESH_TIME = 60*3 # 3 Minutes
+
+  thread = Thread.new do
+    puts "[FANTASY] Starting Thread"
+    while true
+      update_events!
+      sleep REFRESH_TIME 
+    end
+  end
+
   before do
     https!
   end
@@ -55,6 +65,45 @@ class FantasyFirst < WebcoreApp()
       FF::Events.submit_draft(evt, data)
     rescue => e
       [400, {}, "Unknown Error"]
+    end
+  end
+
+  get "/history/:event/?" do |evt|
+    @event = FF::Events.event evt
+    return [400, {}, "Bad event key!"] if @event.nil?
+
+    content_type "text/json"
+    services[:memcache].cache("h/#{evt}", REFRESH_TIME / 2) do
+      @event.history_json
+    end
+  end
+
+  get "/alliance/:event/?" do |evt|
+    @event = FF::Events.event evt
+    return [400, {}, "Bad event key!"] if @event.nil?
+
+    content_type "text/json"
+    services[:memcache].cache("a/#{evt}", REFRESH_TIME / 2) do
+      @event.alliance_json
+    end
+  end
+
+  #### THREAD ####
+
+  def self.update_events! 
+    puts "[FANTASY] Triggering Update"
+    FF::Events.with_transaction do
+      FF::Events.active.each do |event|
+        puts "[FANTASY]: Updating Event #{event.key}"
+        begin
+          event.history_json = JSON.generate(TBA.match_history(event.key))
+          event.alliance_json = JSON.generate(TBA.alliance_points(event.key))
+          event.save
+        rescue => e
+          puts "[FANTASY]: Uncaught: #{e}"
+          puts e.backtrace
+        end
+      end
     end
   end
 

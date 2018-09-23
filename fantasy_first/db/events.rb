@@ -40,6 +40,10 @@ module FF
         Event.order(:key).where(live: true)
       end
 
+      def active
+        Event.order(:key).where(active: true)
+      end
+
       def update_event opts
         ev = Event.first(Sequel.ilike(:key, opts['key']))
         ev.active = opts['active']
@@ -107,6 +111,12 @@ module FF
         edt = EventDraftTeams.first(id: data['id'])
         edt.host = data['host']
         edt.save
+      end
+
+      def with_transaction
+        Webcore::DB.db.transaction do
+          yield
+        end
       end
     end
   end
