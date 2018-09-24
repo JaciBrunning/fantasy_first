@@ -5,7 +5,7 @@ Rake.add_rakelib 'fantasy_first'
 
 task :build => ["fantasy:build"]
 
-task :install => ["clean", "build", "db:migrate"]
+task :install => ["build", "db:migrate"]
 
 namespace :db do
   desc "Run Migrations"
