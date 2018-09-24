@@ -15,6 +15,15 @@ namespace :deploy do
         end
     end
 
+    desc "Extract Gems"
+    task :extract_gems do
+        on roles(:app) do
+            within release_path do
+                execute "ruby", "extract_gems.rb"
+            end
+        end
+    end
+
     desc "Activate Module"
     task :activate do
         on roles(:app) do
@@ -24,6 +33,7 @@ namespace :deploy do
     end
 
     after "bundler:install", "deploy:rake_install"
+    after "bundler:install", "deploy:extract_gems"
     after :deploy, "deploy:activate"
     after :deploy, "service:restart"
 end
