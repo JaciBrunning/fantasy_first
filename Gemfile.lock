@@ -59,7 +59,7 @@ DEPENDENCIES
   pg (= 0.21.0)
   pony (= 1.12)
   rake (= 12.3.1)
-  sass (= 3.5.7)
+  sass (>= 3.5.7)
   sequel (= 5.0.0)
 
 BUNDLED WITH

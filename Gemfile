@@ -1,4 +1,4 @@
-source "https://rubygems.org"
+source "https://rubygems.org" if ENV['GEMFILE_CHILD'].nil?
 
 # Mail
 gem "pony", "1.12"
@@ -12,7 +12,7 @@ gem "sequel", "5.0.0"
 
 # Other
 gem "rake", "12.3.1"
-gem "sass", "3.5.7"
+gem "sass", ">=3.5.7"
 
 # Deployment
 group :development do
