@@ -18,9 +18,11 @@ class FantasyFirst < WebcoreApp()
   thread = Thread.new do
     puts "[FANTASY] Starting Thread"
     while true
+      puts "[FANTASY] Running update"
       update_events!
       sleep REFRESH_TIME 
     end
+    puts "[FANTASY] FATAL! Update loop stopped"
   end
 
   before do
