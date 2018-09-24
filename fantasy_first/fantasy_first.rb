@@ -19,7 +19,20 @@ class FantasyFirst < WebcoreApp()
     puts "[FANTASY] Starting Thread"
     while true
       puts "[FANTASY] Running update"
-      update_events!
+      FF::Events.with_transaction do
+        FF::Events.active.each do |event|
+          puts "[FANTASY]: Updating Event #{event.key}"
+          begin
+            event.history_json = JSON.generate(TBA.match_history(event.key))
+            event.alliance_json = JSON.generate(TBA.alliance_points(event.key))
+            event.save
+          rescue => e
+            puts "[FANTASY]: Uncaught: #{e}"
+            puts e.backtrace
+          end
+        end
+      end
+      
       sleep REFRESH_TIME 
     end
     puts "[FANTASY] FATAL! Update loop stopped"
@@ -86,25 +99,6 @@ class FantasyFirst < WebcoreApp()
     content_type "text/json"
     services[:memcache].cache("a/#{evt}", REFRESH_TIME / 2) do
       @event.alliance_json
-    end
-  end
-
-  #### THREAD ####
-
-  def self.update_events! 
-    puts "[FANTASY] Triggering Update"
-    FF::Events.with_transaction do
-      FF::Events.active.each do |event|
-        puts "[FANTASY]: Updating Event #{event.key}"
-        begin
-          event.history_json = JSON.generate(TBA.match_history(event.key))
-          event.alliance_json = JSON.generate(TBA.alliance_points(event.key))
-          event.save
-        rescue => e
-          puts "[FANTASY]: Uncaught: #{e}"
-          puts e.backtrace
-        end
-      end
     end
   end
 
