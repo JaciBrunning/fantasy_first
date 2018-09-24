@@ -1,4 +1,3 @@
-require 'pony'
 require 'faye/websocket'
 require 'webcore/websocket/driver'
 require 'json'
