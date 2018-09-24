@@ -4,8 +4,13 @@ require_relative 'constants.rb'
 namespace :fantasy do
   desc "Build Fantasy FIRST"
   task :build => ["sass:build", "jsx:build"]
+  task :install => ["jsx:install"]
 
   namespace :jsx do
+    desc "Install NPM Deps"
+    task :install do
+      puts `cd #{FantasyFirstConstants::FANTASY_DIR}; npm install`
+    end
     desc "Build JSX"
     task :build do
       puts `cd #{FantasyFirstConstants::FANTASY_DIR}; npm run build`
