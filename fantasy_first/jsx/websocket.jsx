@@ -10,7 +10,11 @@ export class Websocket {
 
   establish() {
     if (!this.established) {
-      this.websocket = new WebSocket('ws://' + window.location.host + "/" + this.uri)
+      if (location.protocol != 'https:') {
+        this.websocket = new WebSocket('ws://' + window.location.host + "/" + this.uri)
+      } else {
+        this.websocket = new WebSocket('wss://' + window.location.host + "/" + this.uri)
+      }
       this.websocket.onmessage = (e) => { this._message(e) }
       this.websocket.onopen = (e) => { this._open() }
       this.websocket.onclose = (e) => { this._close() }
