@@ -9,7 +9,7 @@ class TBA
     DEFAULT_API_KEY = "19iOXH0VVxCvYQTlmIRpXyx2xoUQuZoWEPECGitvJcFxEY6itgqDP7A4awVL2CJn"
 
     def request path
-      JSON.parse open("https://www.thebluealliance.com/api/v3/#{path}?X-TBA-Auth-Key=#{DEFAULT_API_KEY || ENV['WEBCORE_TBA_KEY']}").read
+      JSON.parse open("https://www.thebluealliance.com/api/v3/#{path}?X-TBA-Auth-Key=#{ENV['WEBCORE_TBA_KEY'] || DEFAULT_API_KEY}").read
     end
 
     def event_details event_key
