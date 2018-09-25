@@ -78,7 +78,7 @@ module FF
 
       def update_team data
         edo = EventDraftOptions.first(event_key: data['event'], team: data['team'])
-        edo.cost = [100, [0, data['cost'].to_i].max].min
+        edo.cost = [200, [0, data['cost'].to_i].max].min
         edo.pickable = data['pickable']
         edo.save
       end

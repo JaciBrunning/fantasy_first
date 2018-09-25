@@ -24,7 +24,7 @@ export class DraftPicker extends React.Component {
   }
 
   remainingCost(selected) {
-    var remaining = 100;
+    var remaining = 200;
     selected.forEach((v) => {
       remaining -= v.cost
     })

@@ -18,7 +18,7 @@ class EventDraftOptionRow extends React.Component {
     return <tr>
       <td> { this.props.number } </td>
       <td> 
-        <input type="number" min="0" max="100" value={ this.state.cost } onChange={(e) => this.setState({cost: e.target.value})} onKeyDown={(e) => { if (e.keyCode == 13) this.save(e) }}></input>
+        <input type="number" min="0" max="200" value={ this.state.cost } onChange={(e) => this.setState({cost: e.target.value})} onKeyDown={(e) => { if (e.keyCode == 13) this.save(e) }}></input>
       </td>
       <td> 
         <input type="checkbox" checked={ this.state.pickable} onChange={(e) => { this.setState({pickable: e.target.checked}); this.save(e) }}></input>
