@@ -89,7 +89,7 @@ module FF
           allteams = teams(evt).all
           mapped = data["teams"].map { |x| allteams.select{ |t| t.team == x }.first }
           return [400, {}, "Not pickable!"] unless mapped.select(&:nil?).empty?
-          return [400, {}, "Overcost!"] if mapped.map { |x| x.cost }.inject(:+) > 100
+          return [400, {}, "Overcost!"] if mapped.map { |x| x.cost }.inject(:+) > 200
           EventDraftTeams.create(event_key: evt, team_name: data["name"], team_email: data["email"], picks_json: data["teams"].to_json)
           "Success"
         rescue Sequel::UniqueConstraintViolation => e
