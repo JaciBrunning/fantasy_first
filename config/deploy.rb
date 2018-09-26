@@ -45,14 +45,6 @@ namespace :service do
             execute "sudo systemctl restart webcore.service"
         end
     end
-
-    desc "Restart memcache"
-    task :memcache do
-        on roles(:app) do
-            execute "sudo systemctl restart memcached.service"
-        end
-    end
     
     after :deploy, "service:restart"
-    after :deploy, "service:memcache"
 end
