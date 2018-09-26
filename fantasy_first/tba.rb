@@ -42,9 +42,9 @@ class TBA
           alliancenum = alliance["number"].to_i
           alliancepick = alliance["pick"].to_i 
 
-          doa = [ alliancenum, alliancenum, 17 - alliancenum, 16 + alliancenum ][alliancepick]  # Serpentine
+          doa = [ alliancenum, alliancenum, 17 - alliancenum, 16 + alliancenum, 0 ][alliancepick]  # Serpentine
           if event_key.end_with? == "iri"
-            doa = [ alliancenum, alliancenum, 8 + alliancenum, 25 - alliancenum ][alliancepick]
+            doa = [ alliancenum, alliancenum, 8 + alliancenum, 25 - alliancenum, 0 ][alliancepick]
           end
           points[team] = [17 - doa, 0].max
         end
