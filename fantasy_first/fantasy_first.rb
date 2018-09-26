@@ -82,7 +82,9 @@ class FantasyFirst < WebcoreApp()
     end
   end
 
-  get "/history/:event/?" do |evt|
+  #### REST ####
+
+  get "/event/:event/history/?" do |evt|
     @event = FF::Events.event evt
     return [400, {}, "Bad event key!"] if @event.nil?
 
@@ -92,7 +94,7 @@ class FantasyFirst < WebcoreApp()
     end
   end
 
-  get "/alliance/:event/?" do |evt|
+  get "/event/:event/alliances/?" do |evt|
     @event = FF::Events.event evt
     return [400, {}, "Bad event key!"] if @event.nil?
 
@@ -100,6 +102,16 @@ class FantasyFirst < WebcoreApp()
     services[:memcache].cache("a/#{evt}", REFRESH_TIME / 2) do
       @event.alliance_json
     end
+  end
+
+  get "/event/:event/picks/users?" do |evt|
+    content_type "text/json"
+    FF::Events.all_drafts(evt).where(host: false).map { |x| { name: x.team_name, picks: JSON.parse(x.picks_json) } }.to_json
+  end
+
+  get "/event/:event/picks/hosts?" do |evt|
+    content_type "text/json"
+    FF::Events.all_drafts(evt).where(host: true).map { |x| { name: x.team_name, picks: JSON.parse(x.picks_json) } }.to_json
   end
 
   #### ADMIN ####
@@ -177,7 +189,7 @@ class FantasyFirst < WebcoreApp()
   fantasy_css.memcache = true
   services[:cdn].register fantasy_css
 
-  ["admin", "admin_event", "draft"].each do |name|
+  ["admin", "admin_event", "draft", "event"].each do |name|
     jsx = FileResource.new :"#{name}.js", File.join(FantasyFirstConstants::JS_DIR, "#{name}.js")
     jsx.memcache = true
     services[:cdn].register jsx

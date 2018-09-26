@@ -5,7 +5,8 @@ module.exports = {
   entry: {
       admin: './jsx/admin.jsx',
       admin_event: './jsx/admin_event.jsx',
-      draft: './jsx/draft.jsx'
+      draft: './jsx/draft.jsx',
+      event: './jsx/event_view.jsx'
   },
   output: {
       path: path.resolve(__dirname, 'build/js'),
@@ -21,6 +22,10 @@ module.exports = {
               query: {
                   presets: ["es2015", "react"]
               }
+          },
+          {
+            test: /\.css$/,
+            use: [ 'style-loader', 'css-loader' ]
           }
       ]
   },

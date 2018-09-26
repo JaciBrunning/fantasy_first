@@ -1,3 +1,25 @@
 <h2> Fantasy FIRST - <%= @event.name %> </h2>
 <h4> Presented by FIRST Updates Now // Site by Jaci </h4>
 
+<% if !@event.active %>
+  <h5> Hold tight! The event should be starting soon </h5>
+<% else %>
+
+<div id="controller">
+</div>
+
+<h3> Hosts Leaderboard </h3>
+<div id="hosts_leaderboard">
+</div>
+<br />
+
+<h3> Community Leaderboard </h3>
+<div id="event_view">
+</div>
+
+<script type="text/javascript">
+  var EVENT_KEY = "<%=@event.key %>";
+</script>
+<script src="/cdn/event.js" crossorigin></script>
+
+<% end %>

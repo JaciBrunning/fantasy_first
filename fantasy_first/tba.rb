@@ -57,9 +57,10 @@ class TBA
       matches = event_matches(event_key)
       
       history = []
-      records = {}
       matches.sort_by{ |m| m['time'] }.each do |m|
         match_type = m["comp_level"] == "qm" ? :q : :e
+
+        teams = []
 
         unless m["alliances"]["red"]["score"] == -1 # Not yet played
           ["red", "blue"].each do |alliance|
@@ -73,14 +74,16 @@ class TBA
             end
 
             m["alliances"][alliance]["team_keys"].each do |team|
-              records[team] ||= {q: [0, 0, 0], e: [0, 0, 0]}   # W, T, L
-              records[team][match_type][r_key] += 1
+              teams << [team, r_key]
+              # records[team] ||= {q: [0, 0, 0], e: [0, 0, 0]}   # W, T, L
+              # records[team][match_type][r_key] += 1
             end
           end
 
           history << { 
             m: friendly_match_name(m),
-            t: records.dup
+            t: teams,
+            p: match_type == :e
           }
         end
       end

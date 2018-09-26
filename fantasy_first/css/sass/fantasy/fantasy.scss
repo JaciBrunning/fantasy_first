@@ -66,3 +66,29 @@ h4 {
 p {
   margin-bottom: 0;
 }
+
+.input-range {
+  height: 7rem !important;
+}
+
+.input-range__label--min, .input-range__label--max {
+  bottom: 4rem !important;
+  visibility: hidden;
+}
+
+.input-range__label {
+  font-size: 1.5rem !important;
+  font-family: inherit !important;
+}
+
+.input-range__label--value {
+  font-size: 1.7rem !important;
+  top: 0.6rem !important;
+  color: #606c76 !important;
+}
+
+.input-range__slider {
+  height: 1.5rem !important;
+  width: 1.5rem !important;
+  margin-top: -0.85rem !important;
+}
