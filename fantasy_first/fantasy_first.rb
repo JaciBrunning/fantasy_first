@@ -106,12 +106,16 @@ class FantasyFirst < WebcoreApp()
 
   get "/event/:event/picks/users?" do |evt|
     content_type "text/json"
-    FF::Events.all_drafts(evt).where(host: false).map { |x| { name: x.team_name, picks: JSON.parse(x.picks_json) } }.to_json
+    FF::Events.all_drafts(evt).where(host: false).map { |x| 
+      { name: x.team_name.force_encoding('iso-8859-1').encode('utf-8'), picks: JSON.parse(x.picks_json) } 
+    }.to_json
   end
 
   get "/event/:event/picks/hosts?" do |evt|
     content_type "text/json"
-    FF::Events.all_drafts(evt).where(host: true).map { |x| { name: x.team_name, picks: JSON.parse(x.picks_json) } }.to_json
+    FF::Events.all_drafts(evt).where(host: true).map { |x| 
+      { name: x.team_name.force_encoding('iso-8859-1').encode('utf-8'), picks: JSON.parse(x.picks_json) }
+    }.to_json
   end
 
   #### ADMIN ####
