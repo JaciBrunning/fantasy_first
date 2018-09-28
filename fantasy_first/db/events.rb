@@ -103,6 +103,13 @@ module FF
         EventDraftTeams.where(event_key: evt)
       end
 
+      def all_drafts_json evt
+        EventDraftTeams.where(event_key: evt).map { |x|
+          x.team_name = x.team_name.force_encoding('iso-8859-1').encode('utf-8')
+          x
+        }.to_json
+      end
+
       def delete_draft id
         EventDraftTeams.where(id: id).delete
       end
