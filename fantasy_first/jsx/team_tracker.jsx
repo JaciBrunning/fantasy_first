@@ -51,7 +51,7 @@ export class TeamTracker {
     this.points = { }
     if (this.targetIdx != -1) {
       let target = this.teamHistory[this.targetIdx]
-      for (var i = 0; i < this.targetIdx; i++) {
+      for (var i = 0; i <= this.targetIdx; i++) {
         let cur = this.teamHistory[i]
         let teams = cur['t']
         let playoff = cur['p']
